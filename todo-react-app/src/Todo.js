@@ -17,7 +17,7 @@ function Todo(props) {
         if (e.key === 'Enter') {
             setReadonly(true);
             item.title = newTitle;
-            editItem();
+            editItem(item);
         }
     }
     
@@ -34,7 +34,7 @@ function Todo(props) {
 
     const checkboxEventHandler = (e) => {
         item.done = e.target.checked;
-        editItem();
+        editItem(item);
     }
 
     return (
