@@ -9,13 +9,16 @@ function App() {
     { id: 0, title: "Todo 1 ", done: true },
     { id: 1, title: "Todo 2 ", done: false },
   ]);
+  const [count, setCount] = useState(2);
   
   const [todoItems, setTodoItems] = useState("");
 
   // add 함수 추가
   const add = (item) => {
     const thisItems = items;
-    item.id = "ID-" + thisItems.length;//key를 위한 id 추가
+    // item.id = "ID-" + thisItems.length;//key를 위한 id 추가
+    item.id = count;//key를 위한 id 추가
+    setCount(count+1);
     item.done = false;
     thisItems.push(item);
     setItems(thisItems);
@@ -23,11 +26,21 @@ function App() {
       <Paper style={{ margin: 16 }}>
         <List>
           {items.map((item, idx) => (
-            <Todo item={item} key={item.id} />
+            <Todo item={item} key={item.id} deleteItem={deleteItem} editItem={editItem} />
           ))}
         </List>
       </Paper>
     ));
+  }
+
+  const deleteItem = (item) => {
+    const thisItems = items;
+    const newItems = thisItems.filter(e => e.id != item.id);
+    setItems(newItems);
+  }
+
+  const editItem = () => {
+    setItems([...items]);
     console.log(items);
   }
 
@@ -36,12 +49,12 @@ function App() {
       <Paper style={{ margin: 16 }}>
         <List>
           {items.map((item, idx) => (
-            <Todo item={item} key={item.id} />
+            <Todo item={item} key={item.id} deleteItem={deleteItem} editItem={editItem} />
           ))}
         </List>
       </Paper>
     ))
-  }, []);
+  }, [items]);
 
   return (
     <div className="App">
