@@ -4,6 +4,7 @@ import AddTodo from './AddTodo';
 import { Paper, List, Container, AppBar, Toolbar, Grid, Typography, Button } from "@material-ui/core";
 import './App.css';
 import { call, signout } from './service/ApiService';
+import DeleteTodo from './DeleteTodo';
 
 function App() {
   const [items, setItems] = useState([]);
@@ -47,6 +48,17 @@ function App() {
     call("/todo","PUT",item).then((response) => setItems(response.data));
   }
 
+  // 체크된 항목들 일괄 삭제
+  const deleteForComplete = () => {
+    const thisItems = items;
+    console.log(thisItems);
+    thisItems.map((e) => {
+      if (e.done === true){
+        call("/todo","DELETE",e).then((response) => setItems(response.data));
+      }
+    })
+  }
+
   // call("/todo", "GET", null).then((response) => setItems(response.data));
 
   useEffect(() => {
@@ -87,6 +99,7 @@ function App() {
       <Container maxWidth="md">
         <AddTodo add={add}/>
         <div className='TodoList'>{todoItems}</div>
+        <DeleteTodo deleteForComplete={deleteForComplete} />
       </Container>
     </div>
   );
