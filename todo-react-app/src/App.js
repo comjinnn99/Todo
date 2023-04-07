@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import Todo from './Todo';
 import AddTodo from './AddTodo';
-import { Paper, List, Container } from "@material-ui/core";
+import { Paper, List, Container, AppBar, Toolbar, Grid, Typography, Button } from "@material-ui/core";
 import './App.css';
-import { call } from './service/ApiService';
+import { call, signout } from './service/ApiService';
 
 function App() {
   const [items, setItems] = useState([]);
-  const [count, setCount] = useState(0);
+  const [loading, setLoading] = useState(true);
+  // const [count, setCount] = useState(0);
   
   const [todoItems, setTodoItems] = useState("");
 
@@ -64,15 +65,47 @@ function App() {
     call("/todo", "GET", null).then((response) => setItems(response.data));
   }, []);
 
-  return (
-    <div className="App">
+  var navigationBar = (
+    <AppBar position='static'>
+      <Toolbar>
+        <Grid justify="space-between" container>
+          <Grid item>
+            <Typography variant='h6'>오늘의 할 일</Typography>
+          </Grid>
+          <Grid item>
+            <Button color="inherit" onClick={signout}>logout</Button>
+          </Grid>
+        </Grid>
+      </Toolbar>
+    </AppBar>
+  );
+  
+  // 로딩중이 아닐 때
+  var todoListPage = (
+    <div>
+      {navigationBar}
       <Container maxWidth="md">
-        <AddTodo add={add} />
-        <div className="TodoList">{todoItems}</div>
+        <AddTodo add={add}/>
+        <div className='TodoList'>{todoItems}</div>
       </Container>
     </div>
   );
 
+  // 로딩중일 때
+  // var loadingPage=<h1>로딩중...</h1>
+  // var content = loadingPage;
+
+  // if (!loading){
+  //   console.log(loading);
+  //   setLoading(!loading);
+  //   content = todoListPage;
+  // }
+    var content = todoListPage;
+  return (
+    <div className='App'>
+        {content}
+    </div>
+  );
 }
 
 export default App;
